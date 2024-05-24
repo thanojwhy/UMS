@@ -1,0 +1,33 @@
+1716202618576	Move 3 resources to 'resources'
+1716202701696	Move 3 resources to 'images'
+1716203064697	Move 'resources' to 'webapp'
+1716203317592	Move 'images' to 'resources'
+1716301240065	Delete element
+1716362564625	Delete element
+1716364149705	Move 'index.jsp' to 'jsp'
+1716364191362	Move 'index.jsp' to 'WEB-INF'
+1716364195808	Delete element
+1716364198232	Move 'index.jsp' to 'webapp'
+1716366010245	Move 'index.jsp' to 'jsp'
+1716366268316	Move 'index.jsp' to 'webapp'
+1716366270670	Move 'Department.jsp' to 'webapp'
+1716368085870	Rename resource 'Department.jsp'
+1716369026141	Move 'ManageDepartment.jsp' to 'jsp'
+1716369072172	Move 'ManageDepartment.jsp' to 'webapp'
+1716378194534	Move 'ManageDepartment.jsp' to 'views'
+1716378467324	Move 'ManageDepartment.jsp' to 'webapp'
+1716378471999	Delete element
+1716379888560	Move 'university1.jpg' to 'webapp'
+1716379892201	Move 'university2.jpg' to 'webapp'
+1716379894557	Move 'university3.jpg' to 'webapp'
+1716380042362	Move 'university1.jpg' to 'images'
+1716380045124	Move 'university2.jpg' to 'images'
+1716380047823	Move 'university3.jpg' to 'images'
+1716380061616	Move 'university1.jpg' to 'resources'
+1716380063553	Move 'university3.jpg' to 'resources'
+1716380065115	Move 'university2.jpg' to 'resources'
+1716386365280	Move 'university1.jpg' to 'images'
+1716386366704	Move 'university2.jpg' to 'images'
+1716386367968	Move 'university3.jpg' to 'images'
+1716386764916	Move 'images' to 'webapp'
+1716387823707	Delete element

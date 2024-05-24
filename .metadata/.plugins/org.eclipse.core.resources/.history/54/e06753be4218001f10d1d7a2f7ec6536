@@ -1,0 +1,55 @@
+package com.pu.controllers;
+
+import com.pu.entities.Department;
+import com.pu.dao.DeptDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/department")
+public class DeptController {
+
+    @Autowired
+    private DeptDAO departmentDao;
+
+    @RequestMapping(value="/insertDept", method=RequestMethod.POST)
+    public String saveDepartment(@RequestParam("deptId") int deptId, @RequestParam("deptName") String deptName) {
+        Department d = new Department();
+        d.setDeptId(deptId);
+        d.setDeptName(deptName);
+        departmentDao.insertDept(d);
+        return "redirect:/department/viewDept";
+    }
+
+    @RequestMapping(value="/viewDept", method=RequestMethod.GET)
+    public String showDepartments(Model model) {
+        List<Department> depart = departmentDao.getAllDept();
+        model.addAttribute("departments", depart);
+        return "ManageDepartment";
+    }
+
+    @RequestMapping(value="/editDept", method=RequestMethod.GET)
+    public String editDepartment(@RequestParam("deptId") int deptId, Model model) {
+        Department department = departmentDao.getDeptById(deptId);
+        model.addAttribute("department", department);
+        return "Department";
+    }
+
+    @RequestMapping(value="/updateDept", method=RequestMethod.POST)
+    public String updateDepartment(@RequestParam("deptId") int deptId, @RequestParam("deptName") String deptName) {
+        Department d = departmentDao.getDeptById(deptId);
+        d.setDeptName(deptName);
+        departmentDao.updateDept(d);
+        return "redirect:/department/viewDept";
+    }
+
+    @RequestMapping(value="/deleteDept", method=RequestMethod.POST)
+    public String deleteDepartment(@RequestParam("deptId") int deptId) {
+        departmentDao.deleteDept(deptId);
+        return "redirect:/department/viewDept";
+    }
+}

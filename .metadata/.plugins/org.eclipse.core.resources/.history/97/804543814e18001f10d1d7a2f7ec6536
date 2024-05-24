@@ -1,0 +1,62 @@
+package com.pu.controllers;
+
+import com.pu.entities.Course;
+import com.pu.dao.CourseDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/Course")
+public class CourseController {
+
+    @Autowired
+    private CourseDAO courseDao;
+
+    @RequestMapping(value="/insertCourse", method=RequestMethod.POST)
+    public String saveCourse(@RequestParam("courseId") int courseId, @RequestParam("courseName") String courseName,@RequestParam("deptId") int deptId,@RequestParam("facultyId") int facultyId) {
+        Course c = new Course();
+        c.setCourseId(courseId);
+        c.setCourseName(courseName);
+        c.setDeptId(deptId);
+        c.setFacultyId(facultyId);
+        courseDao.insertCourse(c);
+        return "redirect:/Course/viewCourse";
+    }
+
+    @RequestMapping(value="/viewCourse", method=RequestMethod.GET)
+    public String showCourses(Model model) {
+        List<Course> depart = courseDao.getAllCourse();
+        for (Course course : depart) {
+            System.out.println("courseId: " + course.getCourseId() + ", courseName: " + course.getCourseName());
+        }
+        model.addAttribute("courses", depart);
+        return "ManageCourse";
+    }
+
+    @RequestMapping(value="/editCourse", method=RequestMethod.GET)
+    public String editCourse(@RequestParam("courseId") int courseId, Model model) {
+        Course Course = courseDao.getCourseById(courseId);
+        model.addAttribute("Course", Course);
+        return "Course";
+    }
+
+    @RequestMapping(value="/updateCourse", method=RequestMethod.POST)
+    public String updateCourse(@RequestParam("courseId") int courseId, @RequestParam("courseName") String courseName,@RequestParam("deptId") int deptId,@RequestParam("facultyId") int facultyId) {
+        Course c = courseDao.getCourseById(courseId);
+        c.setCourseName(courseName);
+        c.setDeptId(deptId);
+        c.setFacultyId(facultyId);
+        courseDao.updateCourse(c);
+        return "redirect:/Course/viewCourse";
+    }
+
+    @RequestMapping(value="/deleteCourse", method=RequestMethod.POST)
+    public String deleteCourse(@RequestParam("courseId") int courseId) {
+        courseDao.deleteCourse(courseId);
+        return "redirect:/Course/viewCourse";
+    }
+}

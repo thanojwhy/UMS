@@ -1,0 +1,56 @@
+package com.pu.controllers;
+
+import com.pu.entities.Department;
+import com.pu.dao.DeptDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/department")
+public class DeptController {
+
+    @Autowired
+    private DeptDAO departmentDao;
+
+    @RequestMapping("/form")
+    public String showForm(Model model) {
+        model.addAttribute("department", new Department());
+        return "departmentForm";
+    }
+
+    @RequestMapping(value="/save",method=RequestMethod.POST)
+    public String saveDepartment(@ModelAttribute("department") Department department) {
+        departmentDao.save(department);
+        return "redirect:/department/list";
+    }
+
+    @RequestMapping("/list")
+    public String showDepartments(Model model) {
+        List<Department> departments = departmentDao.getAll();
+        model.addAttribute("departments", departments);
+        return "departmentList";
+    }
+    
+    @RequestMapping(value="/edit/{id}")
+    public String editDepartment(@PathVariable("id") int id, Model model) {
+        Department department = departmentDao.getById(id);
+        model.addAttribute("department", department);
+        return "departmentForm";
+    }
+
+    @RequestMapping(value="/update/{id}",method=RequestMethod.POST)
+    public String updateDepartment(@ModelAttribute("department") Department department) {
+        departmentDao.update(department);
+        return "redirect:/department/list";
+    }
+
+    @RequestMapping(value="/delete/{id}",method=RequestMethod.POST)
+    public String deleteDepartment(@PathVariable("id") int id) {
+        departmentDao.delete(id);
+        return "redirect:/department/list";
+    }
+}

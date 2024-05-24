@@ -1,0 +1,5 @@
+#Tomcat publish data
+#Thu May 23 12:45:23 IST 2024
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\Asus\\.m2\\repository\\org\\apache\\tomcat\\tomcat-jasper-el\\9.0.55\\tomcat-jasper-el-9.0.55.jar=WEB-INF/lib/tomcat-jasper-el-9.0.55.jar
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\Asus\\.m2\\repository\\org\\apache\\tomcat\\tomcat-jasper\\9.0.55\\tomcat-jasper-9.0.55.jar=WEB-INF/lib/tomcat-jasper-9.0.55.jar
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\Asus\\.m2\\repository\\org\\springframework\\spring-web\\5.3.12\\spring-web-5.3.12.jar=WEB-INF/lib/spring-web-5.3.12.jar

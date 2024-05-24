@@ -1,0 +1,58 @@
+package com.pu.dao;
+
+import com.pu.entities.Department;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+@Repository
+public class DeptDAO {
+
+    private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public int insertDept(Department d) {
+        String sql="insert into department(DeptId,DeptName) values('"+d.getDeptId()+"', '"+d.getDeptName()+"')";
+        return jdbcTemplate.update(sql);
+    }
+
+    public int updateDept(Department d) {
+        String sql = "UPDATE department SET DeptName = '" + d.getDeptName() +"' WHERE DeptId = " + d.getDeptId();
+        return jdbcTemplate.update(sql);
+    }
+
+    public int deleteDept(int id) {
+        String sql = "DELETE FROM department WHERE DeptId="+id;
+        return jdbcTemplate.update(sql);
+    }
+    
+    @SuppressWarnings("deprecation")
+	public Department getDeptById(int id) {
+        String sql = "SELECT * FROM department WHERE dept_id=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(Department.class));
+    }
+
+    public List<Department> getAllDept() {
+        String sql = "SELECT * FROM department";
+        return jdbcTemplate.query(sql, new RowMapper<Department>() {
+            public Department mapRow(ResultSet rs, int row) throws SQLException {
+                Department d = new Department();
+                d.setDeptId(rs.getInt("DeptId"));
+                d.setDeptName(rs.getString("DeptName"));
+                System.out.println(d.getDeptId());
+                return d; 
+            }
+        });
+    }
+}
+

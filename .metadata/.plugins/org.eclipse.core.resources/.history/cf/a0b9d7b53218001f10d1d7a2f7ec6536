@@ -1,0 +1,43 @@
+package com.pu.dao;
+
+import com.pu.entities.Course;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class CourseDAO {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void save(Course course) {
+        String sql = "INSERT INTO course (course_id, course_name, faculty_id, dept_id) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, course.getCourseId(), course.getCourseName(), course.getFacultyId(), course.getDeptId());
+    }
+
+    public void update(Course course) {
+        String sql = "UPDATE course SET course_name=?, faculty_id=?, dept_id=? WHERE course_id=?";
+        jdbcTemplate.update(sql, course.getCourseName(), course.getFacultyId(), course.getDeptId(), course.getCourseId());
+    }
+
+    public void delete(int id) {
+        String sql = "DELETE FROM course WHERE course_id=?";
+        jdbcTemplate.update(sql, id);
+    }
+    
+    @SuppressWarnings("deprecation")
+	public Course getById(int id) {
+        String sql = "SELECT * FROM course WHERE course_id=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rowNum) ->
+                new Course(rs.getInt("course_id"), rs.getString("course_name"), rs.getInt("faculty_id"), rs.getInt("dept_id")));
+    }
+
+    public List<Course> getAll() {
+        String sql = "SELECT * FROM course";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new Course(rs.getInt("course_id"), rs.getString("course_name"), rs.getInt("faculty_id"), rs.getInt("dept_id")));
+    }
+}

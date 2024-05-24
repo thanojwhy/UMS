@@ -1,0 +1,57 @@
+package com.pu.controllers;
+
+import com.pu.entities.Faculty;
+import com.pu.dao.FacultyDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/faculty")
+public class FacultyController {
+
+    @Autowired
+    private FacultyDAO facultyDao;
+
+    @GetMapping("/form")
+    public String showForm(Model model) {
+        model.addAttribute("faculty", new Faculty());
+        return "facultyForm";
+    }
+
+    @PostMapping("/save")
+    public String saveFaculty(@ModelAttribute("faculty") Faculty faculty) {
+        facultyDao.save(faculty);
+        return "redirect:/faculty/list";
+    }
+
+    @GetMapping("/list")
+    public String showFaculties(Model model) {
+        List<Faculty> faculties = facultyDao.getAll();
+        model.addAttribute("faculties", faculties);
+        return "facultyList";
+    }
+    
+    @GetMapping("/edit/{id}")
+    public String editFaculty(@PathVariable("id") int id, Model model) {
+        Faculty faculty = facultyDao.getById(id);
+        model.addAttribute("faculty", faculty);
+        return "facultyForm";
+    }
+    
+    @PostMapping("/update")
+    public String updateFaculty(@ModelAttribute("faculty") Faculty faculty) {
+        facultyDao.update(faculty);
+        return "redirect:/faculty/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteFaculty(@PathVariable("id") int id) {
+        facultyDao.delete(id);
+        return "redirect:/faculty/list";
+    }
+}
+

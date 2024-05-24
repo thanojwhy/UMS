@@ -1,0 +1,51 @@
+package com.pu.controllers;
+
+import com.pu.entities.Course;
+import com.pu.dao.CourseDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/course")
+public class CourseController {
+
+    @Autowired
+    private CourseDAO courseDao;
+
+
+    @RequestMapping(value="/save",method=RequestMethod.POST)
+    public String saveCourse(@ModelAttribute("course") Course course) {
+        courseDao.insertCourse(course);
+        return "redirect:/course/list";
+    }
+
+    @RequestMapping("/list")
+    public String showCourses(Model model) {
+        List<Course> courses = courseDao.getAllCourse();
+        model.addAttribute("courses", courses);
+        return "courseList";
+    }
+    
+    @RequestMapping(value="/edit/{id}")
+    public String editCourse(@PathVariable("id") int id, Model model) {
+        Course course = courseDao.getCourseById(id);
+        model.addAttribute("course", course);
+        return "courseForm";
+    }
+
+    @RequestMapping(value="/update/{id}",method=RequestMethod.POST)
+    public String updateCourse(@ModelAttribute("course") Course course) {
+        courseDao.updateCourse(course);
+        return "redirect:/course/list";
+    }
+
+    @RequestMapping(value="/delete/{id}",method=RequestMethod.POST)
+    public String deleteCourse(@PathVariable("id") int id) {
+        courseDao.deleteCourse(id);
+        return "redirect:/course/list";
+    }
+}

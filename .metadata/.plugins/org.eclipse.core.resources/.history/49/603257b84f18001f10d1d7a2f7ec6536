@@ -1,0 +1,60 @@
+package com.pu.controllers;
+
+import com.pu.entities.Faculty;
+import com.pu.dao.FacultyDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/faculty")
+public class FacultyController {
+
+    @Autowired
+    private FacultyDAO facultyDao;
+
+    @RequestMapping(value="/insertFaculty", method=RequestMethod.POST)
+    public String saveFaculty(@RequestParam("facultyId") int facultyId, @RequestParam("facultyName") String facultyName,@RequestParam("deptId") int deptId) {
+        Faculty f = new Faculty();
+        f.setFacultyId(facultyId);
+        f.setFacultyName(facultyName);
+        f.setDeptId(deptId);
+        facultyDao.insertFaculty(f);
+        return "redirect:/faculty/viewFaculty";
+    }
+
+    @RequestMapping(value="/viewFaculty", method=RequestMethod.GET)
+    public String showFacultys(Model model) {
+        List<Faculty> depart = facultyDao.getAllFaculty();
+        for (Faculty Faculty : depart) {
+            System.out.println("FacultyId: " + Faculty.getFacultyId() + ", FacultyName: " + Faculty.getFacultyName());
+        }
+        model.addAttribute("faculty", depart);
+        return "ManageFaculty";
+    }
+
+    @RequestMapping(value="/editFaculty", method=RequestMethod.GET)
+    public String editFaculty(@RequestParam("FacultyId") int FacultyId, Model model) {
+        Faculty Faculty = facultyDao.getFacultyById(FacultyId);
+        model.addAttribute("faculty", Faculty);
+        return "Faculty";
+    }
+
+    @RequestMapping(value="/updateFaculty", method=RequestMethod.POST)
+    public String updateFaculty(@RequestParam("facultyId") int facultyId, @RequestParam("facultyName") String facultyName,@RequestParam("deptId") int deptId) {
+        Faculty f = facultyDao.getFacultyById(facultyId);
+        f.setFacultyName(facultyName);
+        f.setDeptId(deptId);
+        facultyDao.updateFaculty(f);
+        return "redirect:/faculty/viewFaculty";
+    }
+
+    @RequestMapping(value="/deleteFaculty", method=RequestMethod.POST)
+    public String deleteFaculty(@RequestParam("FacultyId") int facultyId) {
+        facultyDao.deleteFaculty(facultyId);
+        return "redirect:/faculty/viewFaculty";
+    }
+}

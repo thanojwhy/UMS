@@ -1,0 +1,55 @@
+package com.pu.controllers;
+
+import com.pu.entities.Department;
+import com.pu.dao.DeptDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/department")
+public class DeptController {
+
+    @Autowired
+    private DeptDAO departmentDao;
+
+    @RequestMapping(value="/insertDept", method=RequestMethod.POST)
+    public String saveDepartment(@RequestParam("DeptId") String DeptId, @RequestParam("DeptName") String DeptName) {
+        Department d = new Department();
+        d.setDeptId(Integer.parseInt(DeptId));
+        d.setDeptName(DeptName);
+        departmentDao.insertDept(d);
+        return "redirect:/department/viewDept";
+    }
+
+    @RequestMapping(value="/viewDept", method=RequestMethod.GET)
+    public String showDepartments(Model model) {
+        List<Department> departments = departmentDao.getAllDept();
+        model.addAttribute("departments", departments);
+        return "Department";
+    }
+
+    @RequestMapping(value="/editDept", method=RequestMethod.GET)
+    public String editDepartment(@RequestParam("DeptId") int DeptId, Model model) {
+        Department department = departmentDao.getDeptById(DeptId);
+        model.addAttribute("department", department);
+        return "department";
+    }
+
+    @RequestMapping(value="/updateDept", method=RequestMethod.POST)
+    public String updateDepartment(@RequestParam("DeptId") int DeptId, @RequestParam("DeptName") String DeptName) {
+        Department d = departmentDao.getDeptById(DeptId);
+        d.setDeptName(DeptName);
+        departmentDao.updateDept(d);
+        return "redirect:/department/viewDept";
+    }
+
+    @RequestMapping(value="/deleteDept", method=RequestMethod.POST)
+    public String deleteDepartment(@RequestParam("DeptId") int DeptId) {
+        departmentDao.deleteDept(DeptId);
+        return "redirect:/department/viewDept";
+    }
+}

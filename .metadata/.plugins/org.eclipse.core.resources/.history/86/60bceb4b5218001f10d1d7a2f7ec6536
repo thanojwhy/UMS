@@ -1,0 +1,57 @@
+package com.pu.dao;
+
+import com.pu.entities.Course;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+@Repository
+public class CourseDAO {
+
+    private JdbcTemplate jdbcTemplate;
+    
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public int insertCourse(Course c) {
+        String sql="insert into course(CourseId,CourseName,DeptId,FacultyId) values('"+c.getCourseId()+"', '"+c.getCourseName()+"','"+c.getDeptId()+"','"+c.getFacultyId()+"')";
+        return jdbcTemplate.update(sql);
+    }
+
+    public int updateCourse(Course c) {
+        String sql = "update course set CourseName = '" + c.getCourseName() +"',DeptId='"+c.getDeptId()+"',FacultyId='"+c.getFacultyId()+"' where CourseId = '" + c.getCourseId()+"'";
+        return jdbcTemplate.update(sql);
+    }
+
+    public int deleteCourse(int courseId) {
+        String sql = "delete from course where CourseId="+courseId;
+        return jdbcTemplate.update(sql);
+    }
+    
+	@SuppressWarnings("deprecation")
+	public Course getCourseById(int courseId) {
+        String sql = "select * from course where CourseId=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{courseId}, new BeanPropertyRowMapper<>(Course.class));
+    }
+
+    public List<Course> getAllCourse() {
+        String sql = "select * from course";
+        return jdbcTemplate.query(sql, new RowMapper<Course>() {
+            public Course mapRow(ResultSet rs, int row) throws SQLException {
+                Course d = new Course();
+                d.setCourseId(rs.getInt("courseId"));
+                d.setCourseName(rs.getString("courseName"));
+                return d;
+            }
+        });
+    }
+}
+
